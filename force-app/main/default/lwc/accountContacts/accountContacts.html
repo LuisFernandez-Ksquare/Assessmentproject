@@ -6,81 +6,26 @@
   @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
 -->
 <template>
-    <div class="slds-modal__header slds-p-around_medium slds-grid slds-grid_align-center">
-        <h2 class="slds-text-heading_medium slds-col">Contact Search</h2>
-    </div> 
-    <div class="slds-modal__content slds-p-around_medium" style="height:400px">
-        <div class="search-container slds-grid slds-grid_align-center">
-            <lightning-input
-                class="slds-col slds-m-right_small"
-                label="Search by Name"
-                type="text"
-                value={searchKey}
-                onchange={handleSearchKeyChange}
-            ></lightning-input>
-
-        <lightning-button
-            class="slds-col"
-            label="Search"
-            variant="brand"
-            onclick={searchContacts}
-        ></lightning-button>
-        </div>
-
-        <template if:false={createNewContact}>
-            <lightning-datatable
-                data={contacts}
-                columns={columns}
-                key-field="Id"
-                hide-checkbox-column="true"
-                onrowaction={handleRowAction}
-                current-page-token={currentPageToken}
-                has-next-page={hasNextPage}
-                has-previous-page={hasPreviousPage}
-                next-page={nextPage}
-                previous-page={previousPage}
-            ></lightning-datatable>
-
-            <div class="pagination-container slds-grid slds-grid_align-center">
-                <template if:true={hasPreviousPage}>
-                    <lightning-button
-                        class="slds-col slds-m-right_small"
-                        label="Previous"
-                        variant="brand"
-                        onclick={previousPage}
-                    ></lightning-button>
-                </template>
-
-                <template if:true={hasNextPage}>
-                    <lightning-button
-                        class="slds-col"
-                        label="Next"
-                        variant="brand"
-                        onclick={nextPage}
-                    ></lightning-button>
-                </template>
-            </div>
-        </template>
-
-        <template if:true={createNewContact}>
-            <lightning-record-form
-                object-api-name="Contact"
-                fields={fields}
-                onsuccess={handleSuccess}
-                oncancel={handleCancel}
-            ></lightning-record-form>
-        </template>
+    <div class="slds-grid slds-gutters">
+      <div class="slds-col slds-size_1-of-2">
+        <lightning-input label="Search by Name" type="text" value={searchKey} onchange={handleSearchKeyChange}></lightning-input>
+        <lightning-button label="Search" onclick={searchContacts}></lightning-button>
+      </div>
+      <div class="slds-col slds-size_1-of-2">
+        <lightning-button label="Create New" onclick={createContact} class="slds-m-left_medium"></lightning-button>
+      </div>
     </div>
-    <div class="create-new-container slds-text-align_right">
-        <lightning-button
-            label="Create New"
-            variant="brand"
-            onclick={createContact}
-        ></lightning-button>
-    </div>
-</template>
-
-
+    <template if:false={createNewContact}>
+      <lightning-datatable data={displayContacts} columns={columns} key-field="Id"
+                          onrowaction={handleRowAction} hide-checkbox-column show-row-number-column
+                          enable-infinite-loading>
+      </lightning-datatable>
+    </template>
+    <template if:true={createNewContact}>
+      <lightning-record-form object-api-name="Contact" fields={fields} onsuccess={handleSuccess} oncancel={handleCancel}></lightning-record-form>
+    </template>
+  </template>
+  
 
     
 
